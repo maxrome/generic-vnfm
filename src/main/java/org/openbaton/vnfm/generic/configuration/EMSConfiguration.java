@@ -20,6 +20,7 @@
 package org.openbaton.vnfm.generic.configuration;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import javax.annotation.PostConstruct;
 import org.openbaton.vnfm.generic.interfaces.EmsInterface;
@@ -123,7 +124,9 @@ public class EMSConfiguration {
     Properties properties = new Properties();
 
     try {
-      properties.load(this.getClass().getClassLoader().getResourceAsStream("conf.properties"));
+      InputStream propertiesStream = this.getClass().getClassLoader().getResourceAsStream("conf.properties");
+      properties.load(propertiesStream);
+      propertiesStream.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
