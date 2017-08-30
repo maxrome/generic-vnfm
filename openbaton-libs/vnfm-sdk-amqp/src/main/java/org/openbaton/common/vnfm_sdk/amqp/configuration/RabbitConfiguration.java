@@ -18,6 +18,7 @@
 package org.openbaton.common.vnfm_sdk.amqp.configuration;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import javax.annotation.PostConstruct;
 import org.openbaton.common.vnfm_sdk.amqp.AbstractVnfmSpringAmqp;
@@ -159,7 +160,9 @@ public class RabbitConfiguration {
     Properties properties = new Properties();
 
     try {
-      properties.load(this.getClass().getClassLoader().getResourceAsStream("conf.properties"));
+      InputStream propertiesStream = this.getClass().getClassLoader().getResourceAsStream("conf.properties");
+      properties.load(propertiesStream);
+      propertiesStream.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
