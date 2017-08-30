@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.google.json.JsonSanitizer;
 import org.apache.commons.codec.binary.Base64;
 import org.openbaton.catalogue.mano.descriptor.VirtualDeploymentUnit;
 import org.openbaton.catalogue.mano.record.VNFCInstance;
@@ -277,6 +279,10 @@ public class ElementManagementSystem implements EmsInterface {
       throws Exception {
     log.debug("Sending message and waiting: " + command + " to " + vduHostname);
     log.info("Waiting answer from EMS - " + vduHostname);
+
+    // Convert to valid JSON
+    // https://www.owasp.org/index.php/OWASP_JSON_Sanitizer
+    command = JsonSanitizer.sanitize(command);
 
     String response =
         vnfmHelper.sendAndReceive(

@@ -123,6 +123,9 @@ dependencies {
     compile project(':vnfm-sdk-amqp')
     compile 'commons-codec:commons-codec:1.10'
     compile 'org.hibernate:hibernate-core:5.2.6.Final'
+
+    //https://www.owasp.org/index.php/OWASP_JSON_Sanitizer
+    compile 'com.mikesamuel:json-sanitizer:1.2.0'
 }
 
 // Force code formatting
