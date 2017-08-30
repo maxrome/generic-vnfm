@@ -18,6 +18,7 @@
 package org.openbaton.common.vnfm_sdk;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -174,7 +175,9 @@ public abstract class AbstractVnfm
   protected void loadProperties() {
     properties = new Properties();
     try {
-      properties.load(this.getClass().getClassLoader().getResourceAsStream("conf.properties"));
+      InputStream propertiesStream = this.getClass().getClassLoader().getResourceAsStream("conf.properties");
+      properties.load(propertiesStream);
+      propertiesStream.close();
     } catch (IOException e) {
       e.printStackTrace();
       log.error(e.getLocalizedMessage());
