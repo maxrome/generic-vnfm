@@ -18,7 +18,13 @@
 package org.openbaton.vnfm.generic;
 
 import com.google.gson.JsonObject;
-
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
 import org.apache.commons.codec.binary.Base64;
 import org.openbaton.catalogue.mano.common.Event;
 import org.openbaton.catalogue.mano.descriptor.VNFComponent;
@@ -41,16 +47,7 @@ import org.openbaton.vnfm.generic.utils.JsonUtils;
 import org.openbaton.vnfm.generic.utils.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Scanner;
 
 /** Created by mob on 16.07.15. */
 @EnableScheduling
@@ -66,8 +63,11 @@ public class GenericVNFM extends AbstractVnfmSpringAmqp {
   @Autowired private LogUtils logUtils;
 
   private static String convertStreamToString(InputStream is) {
-    Scanner s = new Scanner(is).useDelimiter("\\A");
-    return s.hasNext() ? s.next() : "";
+    String result;
+    try (Scanner s = new Scanner(is).useDelimiter("\\A")) {
+      result = s.hasNext() ? s.next() : "";
+    }
+    return result;
   }
 
   @Override
@@ -523,17 +523,17 @@ public class GenericVNFM extends AbstractVnfmSpringAmqp {
   @Override
   protected String getUserData() {
     String result;
-    try {
+    try (FileInputStream userdataStream = new FileInputStream(userDataFilePath)) {
       log.info("Attempting Userdata file (from properties file): " + userDataFilePath);
-      result = convertStreamToString(new FileInputStream(userDataFilePath));
-    } catch (FileNotFoundException e) {
+      result = convertStreamToString(userdataStream);
+    } catch (IOException ioe) {
       log.warn("Userdata file not found: " + userDataFilePath);
-      try {
+      try (InputStream userdataStream = AbstractVnfm.class.getResourceAsStream("/user-data.sh")) {
         log.warn("Attempting Userdata file (from classpath): /user-data.sh");
-        result = convertStreamToString(AbstractVnfm.class.getResourceAsStream("/user-data.sh"));
-      } catch (NullPointerException npe) {
+        result = convertStreamToString(userdataStream);
+      } catch (NullPointerException | IOException e) {
         log.error("Userdata file not found: '/user-data.sh'");
-        throw npe;
+        throw new NullPointerException("Userdata file not found: '/user-data.sh'");
       }
     }
 
