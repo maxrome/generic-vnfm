@@ -21,6 +21,7 @@ import com.google.gson.JsonObject;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -375,7 +376,9 @@ public class GenericVNFM extends AbstractVnfmSpringAmqp {
     for (ConfigurationParameter configurationParameter :
         virtualNetworkFunctionRecord.getProvides().getConfigurationParameters()) {
       if (!configurationParameter.getConfKey().startsWith("#nfvo:")) {
-        configurationParameter.setValue(String.valueOf((int) (Math.random() * 100)));
+        SecureRandom ranGen = new SecureRandom();
+        int randomNumber = ranGen.nextInt(99);
+        configurationParameter.setValue(String.valueOf(randomNumber);
         log.debug(
             "Setting: "
                 + configurationParameter.getConfKey()
