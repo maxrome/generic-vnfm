@@ -378,7 +378,7 @@ public class GenericVNFM extends AbstractVnfmSpringAmqp {
       if (!configurationParameter.getConfKey().startsWith("#nfvo:")) {
         SecureRandom ranGen = new SecureRandom();
         int randomNumber = ranGen.nextInt(99);
-        configurationParameter.setValue(String.valueOf(randomNumber);
+        configurationParameter.setValue(String.valueOf(randomNumber));
         log.debug(
             "Setting: "
                 + configurationParameter.getConfKey()
