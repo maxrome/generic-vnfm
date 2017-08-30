@@ -65,10 +65,6 @@ public class GenericVNFM extends AbstractVnfmSpringAmqp {
 
   @Autowired private LogUtils logUtils;
 
-  public static void main(String[] args) {
-    SpringApplication.run(GenericVNFM.class, args);
-  }
-
   private static String convertStreamToString(InputStream is) {
     Scanner s = new Scanner(is).useDelimiter("\\A");
     return s.hasNext() ? s.next() : "";

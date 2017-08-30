@@ -63,7 +63,7 @@ ext {
     /**
      * gradle Related Vars
      */
-    mainClass = 'org.openbaton.vnfm.generic.GenericVNFM'
+    mainClass = 'org.openbaton.vnfm.generic.Application'
     //------------------------------------------------//
     //------------------------------------------------//
     /**
